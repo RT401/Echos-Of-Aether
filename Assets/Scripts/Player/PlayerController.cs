@@ -53,15 +53,15 @@ public class PlayerController : MonoBehaviour
     void HandleMovement()
     {
         // Use camera-relative movement
-        Vector3 foward = cameraTransform.foward;
+        Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
 
-        foward.y = 0;
-        right.y = 0;
-        foward.Normalize();
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
         right.Normalize();
 
-        Vector3 move = (foward * moveInput.y + right * moveInput.x).Normalized;
+        Vector3 move = (forward * moveInput.y + right * moveInput.x).normalized;
         controller.Move(move * moveSpeed * Time.deltaTime);
 
         // Rotate character in movement direction

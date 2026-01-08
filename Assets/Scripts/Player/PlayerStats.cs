@@ -75,7 +75,7 @@ public class PlayerStats : MonoBehaviour
     {
         currentXP += amount;
         if (currentXP >= xpToNextLevel)
-            OnLevelUp();
+            LevelUp();
     }
 
     private void LevelUp()

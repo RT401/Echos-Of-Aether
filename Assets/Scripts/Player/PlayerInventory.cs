@@ -48,7 +48,7 @@ public class PlayerInventory : MonoBehaviour
             return true;
         }
 
-        Debug.LogWarming("inventory is full");
+        Debug.LogWarning("inventory is full");
         return false;
     }
 
@@ -78,9 +78,9 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    public InventoryItem getItem(string itemName)
+    public InventoryItem GetItem(string itemName)
     {
-        return items.Find(itemName => itemName.itemName == itemName);
+        return items.Find(item => item.itemName == itemName);
     }
 
     public void PrintInventory()

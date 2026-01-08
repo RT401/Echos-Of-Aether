@@ -115,11 +115,11 @@ public class PlayerCombat : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
-            var damageable = hit.GetComponent<IDamageable>();
-            if (damageable != null)
-            {
-                damageable.TakeDamage(damage);
-            }
+            //var damageable = hit.GetComponent<IDamageable>();
+            //if (damageable != null)
+            //{
+            //    damageable.TakeDamage(damage);
+            //}
         }
     }
 
