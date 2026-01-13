@@ -33,13 +33,13 @@ public class PlayerMovement : MonoBehaviour
     
     Rigidbody rb;
 
-    private void start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
 
-    void update()
+    void Update()
     {
         //ground check
         Grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
