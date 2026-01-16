@@ -7,12 +7,13 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     private float moveSpeed;
+    private float desiredMoveSpeed;
+    private float lastDesiredMoveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
     public float slideSpeed;
+    public float wallRunSpeed;
 
-    private float desiredMoveSpeed;
-    private float lastDesiredMoveSpeed;
 
     public float speedIncreaseMultiplier;
     public float slopeIncreaseMultiplier;
@@ -68,6 +69,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public bool sliding;
+    public bool crouching;
+    public bool wallrunning;
 
     private void Start()
     {
@@ -131,6 +134,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void StateHandler()
     {
+        // mode - Wallrunning
+        if(wallrunning)
+        {
+            state = MovementState.Wallrunning;
+            desiredMoveSpeed = wallRunSpeed;
+        }
+        
         // mode - Sliding
         if(sliding)
         {
