@@ -1,21 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed;
+    private float moveSpeed;
+    public float walkSpeed;
+    public float sprintSpeed;
 
     public float groundDrag;
 
+    [Header("Jumping")]
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
     public bool readyToJump;
 
+    [Header("Crouching")]
+    public float crouchSpeed;
+    public float crouchYScale;
+    private float startYScale;
+
+
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
+    public KeyCode sprintKey = KeyCode.LeftShift;
+    public KeyCode crouchKey = KeyCode.LeftControl;
 
 
     [Header("Ground Check")]
@@ -33,10 +42,24 @@ public class PlayerMovement : MonoBehaviour
     
     Rigidbody rb;
 
+    public MovementState state;
+    public enum MovementState
+    {
+        Walking,
+        Sprinting,
+        Wallrunning,
+        Crouching,
+        Air
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        readyToJump = true;
+
+        startYScale = transform.localScale.y;
     }
 
     void Update()
@@ -46,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
         MyInput();
         SpeedControl();
+        StateHandler();
 
         // handle drag
         if (Grounded)
@@ -73,8 +97,50 @@ public class PlayerMovement : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+
+        // start crouch
+        if(Input.GetKeyDown(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        }
+
+        // stop crouch
+        if(Input.GetKeyUp(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        }
     }
 
+    private void StateHandler()
+    {
+        // mode - Crouching
+        if(Input.GetKey(crouchKey))
+        {
+            state = MovementState.Crouching;
+            moveSpeed = crouchSpeed;
+        }
+
+        // mode - Sprinting
+        if(Grounded && Input.GetKey(sprintKey))
+        {
+            state = MovementState.Sprinting;
+            moveSpeed = sprintSpeed;
+        }
+
+        // mode - Walking
+        else if(Grounded)
+        {
+            state = MovementState.Walking;
+            moveSpeed = walkSpeed;
+        }
+
+        // mode - Air
+        else
+        {
+            state = MovementState.Air;
+        }
+    }
     private void MovePlayer()
     {
         // calculate movement direction
