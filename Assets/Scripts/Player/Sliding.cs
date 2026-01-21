@@ -34,10 +34,6 @@ public class Sliding : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if(Input.GetKeyDown(slideKey))
-            Debug.Log("Slide Key Down Detected");
-
-
         if (Input.GetKeyDown(slideKey) && (horizontalInput != 0 || verticalInput != 0))
         {
             Debug.Log("Slide Key Pressed");
