@@ -1951,6 +1951,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4790488925176375933, guid: 01c29935940018c4595614f40ed3394c, type: 3}
+      propertyPath: useGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4790488925176375933, guid: 01c29935940018c4595614f40ed3394c, type: 3}
+      propertyPath: exitWallTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4790488925176375933, guid: 01c29935940018c4595614f40ed3394c, type: 3}
+      propertyPath: maxWallRunTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4790488925176375933, guid: 01c29935940018c4595614f40ed3394c, type: 3}
+      propertyPath: gravityCounterForce
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 5081707328045554660, guid: 01c29935940018c4595614f40ed3394c, type: 3}
       propertyPath: m_Name
       value: player
