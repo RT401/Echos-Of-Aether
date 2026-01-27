@@ -64,6 +64,17 @@ public class Connector : MonoBehaviour
 
         // Snap so connectors overlap and face each other
         SnapConnectors(transform, attachB.transform, nextZone.transform);
+
+        // Mark the new connector as occupied
+        MarkConnectorOccupied(attachB);
+
+        // Decrement remaining, and choose a different connector to continue spawning from
+        s_remainingToSpawn--;
+
+        if (s_remainingToSpawn <= 0) return;
+
+        ConnectorPoint continueFrom = PickDifferentConnector(nextZone, attachB);
+        if (continueFrom == null) return;
     }
 
     private static void SnapConnectors(Transform connectorA, Transform connectorB, Transform rootB)
@@ -75,6 +86,34 @@ public class Connector : MonoBehaviour
         // Move rootB so connector positions match
         Vector3 deltaPos = connectorA.position - connectorB.position;
         rootB.position += deltaPos;
+    }
+
+    private static void MarkConnectorOccupied(ConnectorPoint cp)
+    {
+        var spawner = cp.GetComponent<Connector>();
+        if (spawner != null)
+        {
+            spawner.occupied = true;
+        }
+    }
+
+    private static ConnectorPoint PickDifferentConnector(ZonePrefab zone, ConnectorPoint exclude)
+    {
+        if (zone.connectors.Length <= 1) return null;
+
+        // Try a few times to pick a different one
+        for (int i = 0; i < 8; i++)
+        {
+            var c = zone.connectors[UnityEngine.Random.Range(0, zone.connectors.Length)];
+            if (c != null && c != exclude) return c;
+        }
+
+        // Fallback: just pick the first different one
+        foreach (var c in zone.connectors)
+            if (c != null && c != exclude)
+                return c; 
+
+        return null;
     }
 
     private float GetNextZoneIndex()
