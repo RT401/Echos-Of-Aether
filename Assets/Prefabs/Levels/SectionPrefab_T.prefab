@@ -257,7 +257,7 @@ MonoBehaviour:
   occupied: 0
   roomCollisionMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1024
 --- !u!1 &4078711147172084816
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,7 +515,7 @@ MonoBehaviour:
   occupied: 0
   roomCollisionMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1024
 --- !u!1 &7322901227267696942
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,4 +715,4 @@ MonoBehaviour:
   occupied: 0
   roomCollisionMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1024

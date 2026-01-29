@@ -26,6 +26,8 @@ public class Connector : MonoBehaviour
             s_initialised = true;
             s_zonePrefabs = zonePrefabs;
             s_remainingToSpawn = Mathf.Max(0, totalZonesToPlace - 1); // exclude starting zone
+
+            UnityEngine.Random.InitState(13245);
             s_timeGenerated = ((float)DateTime.Now.Hour + ((float)DateTime.Now.Minute * 0.01f)) / 24f;
         }
 
@@ -73,6 +75,10 @@ public class Connector : MonoBehaviour
             // continue from a different connector on hte placed zone
             ConnectorPoint continueFrom = PickDifferentConnector(nextZone, attachB);
             if (continueFrom == null) return;
+
+            var nextSpawner = continueFrom.GetComponent<Connector>();
+            if (nextSpawner != null)
+                nextSpawner.TrySpawnNext();
         }
         else
         {
@@ -172,36 +178,48 @@ public class Connector : MonoBehaviour
     [SerializeField] private LayerMask roomCollisionMask = ~0;
     private bool DoesZoneClash(ZonePrefab zone)
     {
+        Debug.Log(zone.name);
         Collider[] myCols = zone.GetComponentsInChildren<Collider>();
         if (myCols == null || myCols.Length ==  0) return false;
 
-        Bounds b = myCols[0].bounds;
-        for (int i = 1; i < myCols.Length; i++)
-            b.Encapsulate(myCols[i].bounds);
-
-        Vector3 center = b.center;
-        Vector3 halfExtends = b.extents;
-
-        // tiny shrink so "Touching" isnt always counted as overlap
-        halfExtends = Vector3.Max(halfExtends - Vector3.one * 0.02f, Vector3.one * 0.001f);
-
-        var hits = Physics.OverlapBox(
-            center,
-            halfExtends,
-            Quaternion.identity,
-            roomCollisionMask,
-            QueryTriggerInteraction.Ignore
-        );
-
-        for (int i = 0; i <hits.Length; i++)
+        foreach (var col in myCols)
         {
-            if (hits[i] == null) continue;
+            if (col == null) continue;
 
-            // ignore its own collider
-            if (hits[i].transform.IsChildOf(zone.transform))
-                continue;
+            // Ignore triggers (connectors usually)
+            if (col.isTrigger) continue;
 
-            return true;
+            // Ignore connector cubes by name (or change this to a layer/tag check)
+            if (col.gameObject.name.Contains("Connector")) continue;
+
+            // Find any overlaps against other rooms (mask!)
+            Collider[] hits = Physics.OverlapBox(
+                col.bounds.center,
+                col.bounds.extents,
+                col.transform.rotation,   // rotation-aware
+                roomCollisionMask,
+                QueryTriggerInteraction.Ignore
+            );
+
+            foreach (var hit in hits)
+            {
+                if (hit == null) continue;
+
+                // Ignore our own colliders
+                if (hit.transform.IsChildOf(zone.transform)) continue;
+
+                // confirm it's a real penetration (not just broadphase overlap)
+                Vector3 dir;
+                float dist;
+                bool overlapped = Physics.ComputePenetration(
+                    col, col.transform.position, col.transform.rotation,
+                    hit, hit.transform.position, hit.transform.rotation,
+                    out dir, out dist
+                );
+
+                if (overlapped && dist > 0.001f)
+                    return true;
+            }
         }
 
         return false;

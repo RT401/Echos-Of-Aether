@@ -212,7 +212,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4926754009262176343}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -270,7 +270,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -305,6 +305,9 @@ MonoBehaviour:
   - {fileID: 2546676856459018663, guid: 7804bdd86ed7c804e814cf10dc3858fb, type: 3}
   totalZonesToPlace: 10
   occupied: 0
+  roomCollisionMask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &5988919473356069133
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +359,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5988919473356069133}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -414,7 +417,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -449,3 +452,6 @@ MonoBehaviour:
   - {fileID: 2546676856459018663, guid: 7804bdd86ed7c804e814cf10dc3858fb, type: 3}
   totalZonesToPlace: 10
   occupied: 0
+  roomCollisionMask:
+    serializedVersion: 2
+    m_Bits: 1024
