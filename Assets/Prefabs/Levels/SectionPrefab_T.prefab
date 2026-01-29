@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 2058114740203249521}
   - component: {fileID: 3684550009143981304}
   - component: {fileID: 6527073750196253966}
+  - component: {fileID: 355935350633393503}
   m_Layer: 0
   m_Name: Connector
   m_TagString: Untagged
@@ -235,6 +236,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d53bf3015a9440c47b738204678d6658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConnectorPoint
+--- !u!114 &355935350633393503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2365502331423943289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 498ddcb58fc0dc54f88b9c3af200fd74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Connector
+  isSeed: 0
+  zonePrefabs:
+  - {fileID: 5596295166714710956, guid: 244df066d2a4bf0499cb3836f6fe611c, type: 3}
+  - {fileID: 5952216582931171387}
+  totalZonesToPlace: 10
+  occupied: 0
 --- !u!1 &4078711147172084816
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,6 +378,7 @@ GameObject:
   - component: {fileID: 2555694158194946248}
   - component: {fileID: 766723786279546793}
   - component: {fileID: 2938643655056365234}
+  - component: {fileID: 2426858149740881288}
   m_Layer: 0
   m_Name: Connector
   m_TagString: Untagged
@@ -470,6 +490,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d53bf3015a9440c47b738204678d6658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConnectorPoint
+--- !u!114 &2426858149740881288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5197590532496543386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 498ddcb58fc0dc54f88b9c3af200fd74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Connector
+  isSeed: 0
+  zonePrefabs:
+  - {fileID: 5596295166714710956, guid: 244df066d2a4bf0499cb3836f6fe611c, type: 3}
+  - {fileID: 5952216582931171387}
+  totalZonesToPlace: 10
+  occupied: 0
 --- !u!1 &7322901227267696942
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,6 +574,7 @@ GameObject:
   - component: {fileID: 5285557281590447770}
   - component: {fileID: 2851072348831661127}
   - component: {fileID: 9095271227933121535}
+  - component: {fileID: 6200548980727290052}
   m_Layer: 0
   m_Name: Connector
   m_TagString: Untagged
@@ -647,3 +686,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d53bf3015a9440c47b738204678d6658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConnectorPoint
+--- !u!114 &6200548980727290052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644666760373042861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 498ddcb58fc0dc54f88b9c3af200fd74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Connector
+  isSeed: 0
+  zonePrefabs:
+  - {fileID: 5596295166714710956, guid: 244df066d2a4bf0499cb3836f6fe611c, type: 3}
+  - {fileID: 5952216582931171387}
+  totalZonesToPlace: 10
+  occupied: 0

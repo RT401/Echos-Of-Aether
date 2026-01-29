@@ -174,6 +174,7 @@ GameObject:
   - component: {fileID: 6437248931414186854}
   - component: {fileID: 4859749596880501654}
   - component: {fileID: 1130148559455529687}
+  - component: {fileID: 3483182358255197148}
   m_Layer: 0
   m_Name: Connector
   m_TagString: Untagged
@@ -285,6 +286,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d53bf3015a9440c47b738204678d6658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConnectorPoint
+--- !u!114 &3483182358255197148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4926754009262176343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 498ddcb58fc0dc54f88b9c3af200fd74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Connector
+  isSeed: 0
+  zonePrefabs:
+  - {fileID: 5596295166714710956}
+  - {fileID: 5952216582931171387, guid: 23e2427460829c1439166bfff93487a6, type: 3}
+  totalZonesToPlace: 10
+  occupied: 0
 --- !u!1 &5988919473356069133
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,6 +317,7 @@ GameObject:
   - component: {fileID: 8138917922944335132}
   - component: {fileID: 2361762820837718680}
   - component: {fileID: 433897285758133386}
+  - component: {fileID: 3282797463209249390}
   m_Layer: 0
   m_Name: Connector
   m_TagString: Untagged
@@ -409,3 +429,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d53bf3015a9440c47b738204678d6658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConnectorPoint
+--- !u!114 &3282797463209249390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5988919473356069133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 498ddcb58fc0dc54f88b9c3af200fd74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Connector
+  isSeed: 0
+  zonePrefabs:
+  - {fileID: 5952216582931171387, guid: 23e2427460829c1439166bfff93487a6, type: 3}
+  - {fileID: 5596295166714710956}
+  totalZonesToPlace: 10
+  occupied: 0

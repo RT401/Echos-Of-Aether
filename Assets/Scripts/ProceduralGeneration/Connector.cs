@@ -1,5 +1,4 @@
 using System;
-using System.Numerics;
 using UnityEngine;
 
 [RequireComponent(typeof(ConnectorPoint))]
@@ -22,16 +21,16 @@ public class Connector : MonoBehaviour
     void Start()
     {
         // Initialize run once, from the seed connector
-        if (isSeed && !s_initialized)
+        if (isSeed && !s_initialised)
         {
-            s_initialized = true;
+            s_initialised = true;
             s_zonePrefabs = zonePrefabs;
             s_remainingToSpawn = Mathf.Max(0, totalZonesToPlace - 1); // exclude starting zone
             s_timeGenerated = ((float)DateTime.Now.Hour + ((float)DateTime.Now.Minute * 0.01f)) / 24f;
         }
 
         // Only spawn if a run is initialized and we still have zones to spawn
-        if (!s_initialized) return;
+        if (!s_initialised) return;
         TrySpawnNext();
     }
 
@@ -47,10 +46,10 @@ public class Connector : MonoBehaviour
         occupied = true; // Mark this connector as occupied
 
         // pick next zone prefab
-        zonePrefabs prefab = s_zonePrefabs[GetNextZoneIndex()];
+        ZonePrefab prefab = s_zonePrefabs[(int)GetNextZoneIndex()];
 
         // spawn it somewhere appropriate
-        zonePrefabs nextZone = Instantiate(prefab, Vector3.one * 9999f, Quaternion.identity);
+        ZonePrefab nextZone = Instantiate(prefab, Vector3.one * 9999f, Quaternion.identity);
 
         if (nextZone.connectors == null || nextZone.connectors.Length == 0)
         {
@@ -117,9 +116,9 @@ public class Connector : MonoBehaviour
 
     private float GetNextZoneIndex()
     {
-        float trueRand = UnityEngine.Random.Range(0, Zones.Length);
-        trueRand += timeGenerated;
-        trueRand = trueRand % Zones.Length;
+        float trueRand = UnityEngine.Random.Range(0, zonePrefabs.Length);
+        trueRand += s_timeGenerated;
+        trueRand = trueRand % zonePrefabs.Length;
         return trueRand;
     }
 }
