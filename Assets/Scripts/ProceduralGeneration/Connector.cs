@@ -120,7 +120,15 @@ public class Connector : MonoBehaviour
         trueRand += s_timeGenerated;
         trueRand = trueRand % zonePrefabs.Length;
 
-        if(((int)trueRand == Array.FindIndex(zonePrefabs, z => z.gameObject.name == "SectionPrefab_End")) && s_remainingToSpawn > (totalZonesToPlace/2))
+        if  ( 
+                ( 
+                    (int)trueRand == Array.FindIndex(zonePrefabs, z => z.gameObject.name == "SectionPrefab_End") 
+                ) 
+                && 
+                ( 
+                    s_remainingToSpawn > (totalZonesToPlace/2) 
+                )
+            )
         {
             Debug.Log("Refinding rand" + trueRand);
             trueRand = GetNextZoneIndex();
