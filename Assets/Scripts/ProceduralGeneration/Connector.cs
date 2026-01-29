@@ -44,8 +44,6 @@ public class Connector : MonoBehaviour
             Debug.LogError("No zone prefabs assigned for generation.");
             return;
         }
-        
-        occupied = true; // Mark this connector as occupied
 
         // pick next zone prefab
         ZonePrefab prefab = zonePrefabs[(int)GetNextZoneIndex()];
