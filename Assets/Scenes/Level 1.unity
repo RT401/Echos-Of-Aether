@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &432505204 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4219756538327178413, guid: 01c29935940018c4595614f40ed3394c, type: 3}
+  m_PrefabInstance: {fileID: 1033766260}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &700072864
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,6 +495,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1209808155953297084, guid: 5cbbf6d0004147b4b94319f993818e35, type: 3}
+      propertyPath: cameraPosition
+      value: 
+      objectReference: {fileID: 432505204}
     - target: {fileID: 1495254215053316072, guid: 5cbbf6d0004147b4b94319f993818e35, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.17357
