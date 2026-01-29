@@ -36,8 +36,10 @@ public class Connector : MonoBehaviour
 
     private void TrySpawnNext()
     {
+        Debug.Log(s_remainingToSpawn);
+
         if (occupied || s_remainingToSpawn <= 0) return;
-        if (s_zonePrefabs == null || s_zonePrefabs.Length == 0)
+        if (zonePrefabs == null || zonePrefabs.Length == 0)
         {
             Debug.LogError("No zone prefabs assigned for generation.");
             return;
@@ -46,7 +48,7 @@ public class Connector : MonoBehaviour
         occupied = true; // Mark this connector as occupied
 
         // pick next zone prefab
-        ZonePrefab prefab = s_zonePrefabs[(int)GetNextZoneIndex()];
+        ZonePrefab prefab = zonePrefabs[(int)GetNextZoneIndex()];
 
         // spawn it somewhere appropriate
         ZonePrefab nextZone = Instantiate(prefab, Vector3.one * 9999f, Quaternion.identity);
@@ -119,6 +121,13 @@ public class Connector : MonoBehaviour
         float trueRand = UnityEngine.Random.Range(0, zonePrefabs.Length);
         trueRand += s_timeGenerated;
         trueRand = trueRand % zonePrefabs.Length;
+
+        if(((int)trueRand == Array.FindIndex(zonePrefabs, z => z.gameObject.name == "SectionPrefab_End")) && s_remainingToSpawn > (totalZonesToPlace/2))
+        {
+            Debug.Log("Refinding rand" + trueRand);
+            trueRand = GetNextZoneIndex();
+        }
+
         return trueRand;
     }
 }

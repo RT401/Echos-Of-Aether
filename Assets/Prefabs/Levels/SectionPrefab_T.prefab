@@ -252,6 +252,7 @@ MonoBehaviour:
   zonePrefabs:
   - {fileID: 5596295166714710956, guid: 244df066d2a4bf0499cb3836f6fe611c, type: 3}
   - {fileID: 5952216582931171387}
+  - {fileID: 2546676856459018663, guid: 7804bdd86ed7c804e814cf10dc3858fb, type: 3}
   totalZonesToPlace: 10
   occupied: 0
 --- !u!1 &4078711147172084816
@@ -506,6 +507,7 @@ MonoBehaviour:
   zonePrefabs:
   - {fileID: 5596295166714710956, guid: 244df066d2a4bf0499cb3836f6fe611c, type: 3}
   - {fileID: 5952216582931171387}
+  - {fileID: 2546676856459018663, guid: 7804bdd86ed7c804e814cf10dc3858fb, type: 3}
   totalZonesToPlace: 10
   occupied: 0
 --- !u!1 &7322901227267696942
@@ -702,5 +704,6 @@ MonoBehaviour:
   zonePrefabs:
   - {fileID: 5596295166714710956, guid: 244df066d2a4bf0499cb3836f6fe611c, type: 3}
   - {fileID: 5952216582931171387}
+  - {fileID: 2546676856459018663, guid: 7804bdd86ed7c804e814cf10dc3858fb, type: 3}
   totalZonesToPlace: 10
   occupied: 0
