@@ -54,25 +54,50 @@ public class Connector : MonoBehaviour
         if (nextZone.connectors == null || nextZone.connectors.Length == 0)
         {
             Debug.LogError("Spawned zone has no connectors.");
+            Destroy(nextZone.gameObject);
             return;
         }
 
-        // pick a random connector from the new zone
-        ConnectorPoint attachB = nextZone.connectors[UnityEngine.Random.Range(0, nextZone.connectors.Length)];
+        //Try arrach using ANY connector in new room
+        ConnectorPoint attachB = null;
+        if (TryAttachingUsingAnyConnector(nextZone, this.transform, out attachB))
+        {
+            // success: mark both ends occupied
+            MarkConnectorOccupied(attachB);
+            this.occupied = true;
 
-        // Snap so connectors overlap and face each other
-        SnapConnectors(transform, attachB.transform, nextZone.transform);
+            // decrement Only on success
+            s_remainingToSpawn--;
+            if (s_remainingToSpawn <= 0) return;
 
-        // Mark the new connector as occupied
-        MarkConnectorOccupied(attachB);
+            // continue from a different connector on hte placed zone
+            ConnectorPoint continueFrom = PickDifferentConnector(nextZone, attachB);
+            if (continueFrom == null) return;
+        }
+        else
+        {
+            // failed: destroy room, close this connector, DO NOT decrement
+            Destroy(nextZone.gameObject);
+            this.occupied = true; // "closed"
+            Debug.Log("No valid connector on spawned room fit here. Closing this point.");   
+        }
+        
+        // // pick a random connector from the new zone
+        // ConnectorPoint attachB = nextZone.connectors[UnityEngine.Random.Range(0, nextZone.connectors.Length)];
 
-        // Decrement remaining, and choose a different connector to continue spawning from
-        s_remainingToSpawn--;
+        // // Snap so connectors overlap and face each other
+        // SnapConnectors(transform, attachB.transform, nextZone.transform);
 
-        if (s_remainingToSpawn <= 0) return;
+        // // Mark the new connector as occupied
+        // MarkConnectorOccupied(attachB);
 
-        ConnectorPoint continueFrom = PickDifferentConnector(nextZone, attachB);
-        if (continueFrom == null) return;
+        // // Decrement remaining, and choose a different connector to continue spawning from
+        // s_remainingToSpawn--;
+
+        // if (s_remainingToSpawn <= 0) return;
+
+        // ConnectorPoint continueFrom = PickDifferentConnector(nextZone, attachB);
+        // if (continueFrom == null) return;
     }
 
     private static void SnapConnectors(Transform connectorA, Transform connectorB, Transform rootB)
@@ -112,6 +137,74 @@ public class Connector : MonoBehaviour
                 return c; 
 
         return null;
+    }
+
+    private bool TryAttachingUsingAnyConnector(ZonePrefab newZone, Transform existingConnector, out ConnectorPoint chosen)
+    {
+        chosen = null;
+
+        // shuffeling for randomness (not always tried in same order)
+        var conns = (ConnectorPoint[])newZone.connectors.Clone();
+        for (int i = 0; i < conns.Length; i++)
+        {
+            int j = UnityEngine.Random.Range(i, conns.Length);
+            (conns[i], conns[j]) = (conns[j], conns[i]);
+        }
+
+        foreach (var attachB in conns)
+        {
+            if (attachB == null) continue;
+
+            // Snap so connectors overlap and face each other
+            SnapConnectors(existingConnector, attachB.transform, newZone.transform);
+
+            // If no clash we done
+            if (!DoesZoneClash(newZone))
+            {
+                chosen = attachB;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    [SerializeField] private LayerMask roomCollisionMask = ~0;
+    private bool DoesZoneClash(ZonePrefab zone)
+    {
+        Collider[] myCols = zone.GetComponentsInChildren<Collider>();
+        if (myCols == null || myCols.Length ==  0) return false;
+
+        Bounds b = myCols[0].bounds;
+        for (int i = 1; i < myCols.Length; i++)
+            b.Encapsulate(myCols[i].bounds);
+
+        Vector3 center = b.center;
+        Vector3 halfExtends = b.extents;
+
+        // tiny shrink so "Touching" isnt always counted as overlap
+        halfExtends = Vector3.Max(halfExtends - Vector3.one * 0.02f, Vector3.one * 0.001f);
+
+        var hits = Physics.OverlapBox(
+            center,
+            halfExtends,
+            Quaternion.identity,
+            roomCollisionMask,
+            QueryTriggerInteraction.Ignore
+        );
+
+        for (int i = 0; i <hits.Length; i++)
+        {
+            if (hits[i] == null) continue;
+
+            // ignore its own collider
+            if (hits[i].transform.IsChildOf(zone.transform))
+                continue;
+
+            return true;
+        }
+
+        return false;
     }
 
     private float GetNextZoneIndex()
