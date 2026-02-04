@@ -436,7 +436,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3978718584504653095, guid: c42d70d85f8956842953cbc9fb10d926, type: 3}
       propertyPath: totalZonesToPlace
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8532180539986082599, guid: c42d70d85f8956842953cbc9fb10d926, type: 3}
       propertyPath: m_LocalPosition.x

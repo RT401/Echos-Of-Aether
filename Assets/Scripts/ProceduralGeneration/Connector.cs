@@ -18,6 +18,16 @@ public class Connector : MonoBehaviour
     private static float s_timeGenerated;
     private static ZonePrefab[] s_zonePrefabs;
 
+    [Header("Collision Settings")]
+    [Tooltip("Mask for SOLID room geometry colliders (non-trigger).")]
+    [SerializeField] private LayerMask roomCollisionMask = ~0;
+
+    [Tooltip("Mask for ZONE / BOUNDS colliders (usually triggers). Put your 'zone bounds' collider on a dedicated layer and include it here.")]
+    [SerializeField] private LayerMask zoneOverlapMask = 0;
+
+    [Tooltip("How much penetration counts as a real overlap. Keeps 'just touching' valid.")]
+    [SerializeField] private float overlapEpsilon = 0.01f;
+
     void Start()
     {
         // Initialize run once, from the seed connector
@@ -26,8 +36,6 @@ public class Connector : MonoBehaviour
             s_initialised = true;
             s_zonePrefabs = zonePrefabs;
             s_remainingToSpawn = Mathf.Max(0, totalZonesToPlace - 1); // exclude starting zone
-
-            UnityEngine.Random.InitState(13245);
             s_timeGenerated = ((float)DateTime.Now.Hour + ((float)DateTime.Now.Minute * 0.01f)) / 24f;
         }
 
@@ -175,28 +183,74 @@ public class Connector : MonoBehaviour
         return false;
     }
 
-    [SerializeField] private LayerMask roomCollisionMask = ~0;
     private bool DoesZoneClash(ZonePrefab zone)
     {
-        Debug.Log(zone.name);
+        // --- 1) ZoneBounds trigger overlap check (precise OBB) ---
+        if (zoneOverlapMask.value != 0)
+        {
+            // Find the ZoneBounds object (by name) and its BoxCollider
+            Transform zb = zone.transform.Find("ZoneBounds");
+            if (zb != null)
+            {
+                var box = zb.GetComponent<BoxCollider>();
+                if (box != null)
+                {
+                    // Build an oriented box in world space using BoxCollider local center/size
+                    Vector3 worldCenter = box.transform.TransformPoint(box.center);
+
+                    // BoxCollider size is local; convert to world half-extents using lossyScale
+                    Vector3 lossy = box.transform.lossyScale;
+                    Vector3 halfExtents = Vector3.Scale(box.size * 0.5f, new Vector3(
+                        Mathf.Abs(lossy.x), Mathf.Abs(lossy.y), Mathf.Abs(lossy.z)
+                    ));
+
+                    Collider[] hits = Physics.OverlapBox(
+                        worldCenter,
+                        halfExtents,
+                        box.transform.rotation,
+                        zoneOverlapMask,
+                        QueryTriggerInteraction.Collide
+                    );
+
+                    foreach (var hit in hits)
+                    {
+                        if (hit == null) continue;
+                        if (hit.transform.IsChildOf(zone.transform)) continue;
+
+                        // Only consider other ZoneBounds colliders (avoid other triggers on same layer)
+                        if (hit.gameObject.name != "ZoneBounds") continue;
+
+                        // Allow "touching"; reject real penetration
+                        if (Physics.ComputePenetration(
+                            box, box.transform.position, box.transform.rotation,
+                            hit, hit.transform.position, hit.transform.rotation,
+                            out _, out float dist
+                        ))
+                        {
+                            if (dist > overlapEpsilon) return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- 2) Solid geometry check (keep your existing logic) ---
         Collider[] myCols = zone.GetComponentsInChildren<Collider>();
-        if (myCols == null || myCols.Length ==  0) return false;
+        if (myCols == null || myCols.Length == 0) return false;
 
         foreach (var col in myCols)
         {
             if (col == null) continue;
-
-            // Ignore triggers (connectors usually)
             if (col.isTrigger) continue;
-
-            // Ignore connector cubes by name (or change this to a layer/tag check)
             if (col.gameObject.name.Contains("Connector")) continue;
 
-            // Find any overlaps against other rooms (mask!)
+            // Optional: skip the ZoneBounds object entirely in solid pass
+            if (col.gameObject.name == "ZoneBounds") continue;
+
             Collider[] hits = Physics.OverlapBox(
                 col.bounds.center,
                 col.bounds.extents,
-                col.transform.rotation,   // rotation-aware
+                col.transform.rotation,
                 roomCollisionMask,
                 QueryTriggerInteraction.Ignore
             );
@@ -204,21 +258,16 @@ public class Connector : MonoBehaviour
             foreach (var hit in hits)
             {
                 if (hit == null) continue;
-
-                // Ignore our own colliders
                 if (hit.transform.IsChildOf(zone.transform)) continue;
 
-                // confirm it's a real penetration (not just broadphase overlap)
-                Vector3 dir;
-                float dist;
-                bool overlapped = Physics.ComputePenetration(
+                if (Physics.ComputePenetration(
                     col, col.transform.position, col.transform.rotation,
                     hit, hit.transform.position, hit.transform.rotation,
-                    out dir, out dist
-                );
-
-                if (overlapped && dist > 0.001f)
-                    return true;
+                    out _, out float dist
+                ))
+                {
+                    if (dist > overlapEpsilon) return true;
+                }
             }
         }
 
